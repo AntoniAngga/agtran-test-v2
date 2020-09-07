@@ -4,47 +4,24 @@ const bcrypt = require('bcrypt');
 const saltRounds = process.env.PASSWORD_SALT;
 const redis = require('../utils/redis');
 
-exports.findAll = async (_req, res) => {
+exports.findAll = async (_req, res, next) => {
   try {
-    // redis.client.get('userCache', async (err, result) => {
-    //   if (result) {
-    //     res.status(200).json({
-    //       messages: 'Complete Get Users',
-    //       result: JSON.parse(result),
-    //     });
-    //   } else {
-    //     const users = await User.findAll({});
-    //     redis.client.set(
-    //       'userCache',
-    //       JSON.stringify(users),
-    //       'EX',
-    //       60 * 60 * 6,
-    //       (err, reply) => {
-    //         if (!err) {
-    //           res.status(200).json({
-    //             messages: 'Complete Get Users',
-    //             result: users,
-    //           });
-    //         } else {
-    //           res.status(500).json({
-    //             messages: 'Error: Get All Users Redis',
-    //             result: err,
-    //           });
-    //         }
-    //       }
-    //     );
-    //   }
-    // });
-    const users = await User.findAll({});
-    res.status(200).json({
-      messages: 'Complete Get Users',
-      result: users,
-    });
+    const userCache = await redis.client.get('userCache');
+    if (userCache != null) {
+      res.status(200).json({
+        messages: 'Complete Get Users',
+        result: JSON.parse(userCache),
+      });
+    } else {
+      const users = await User.findAll({});
+      await redis.set('userCache', JSON.stringify(users), 'EX', 60 * 60 * 6);
+      res.status(200).json({
+        messages: 'Complete Get Users',
+        result: users,
+      });
+    }
   } catch (err) {
-    res.status(500).json({
-      messages: 'Error: Get All Users',
-      result: err,
-    });
+    next(err);
   }
 };
 

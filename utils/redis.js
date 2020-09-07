@@ -1,11 +1,12 @@
 require('dotenv').config();
-const redis = require('redis');
+const Redis = require('ioredis');
 
-const connection_redis = {
-  url: process.env.REDIS_URL,
-};
+// const connection_redis = {
+//   url: process.env.REDIS_URL,
+// };
+const url = process.env.REDIS_URL || '';
 
-const client = redis.createClient(connection_redis);
+const client = new Redis(url);
 
 module.exports = {
   client,
