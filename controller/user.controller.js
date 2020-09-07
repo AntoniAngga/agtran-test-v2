@@ -14,7 +14,12 @@ exports.findAll = async (_req, res, next) => {
       });
     } else {
       const users = await User.findAll({});
-      await redis.set('userCache', JSON.stringify(users), 'EX', 60 * 60 * 6);
+      await redis.client.set(
+        'userCache',
+        JSON.stringify(users),
+        'EX',
+        60 * 60 * 6
+      );
       res.status(200).json({
         messages: 'Complete Get Users',
         result: users,
