@@ -60,9 +60,6 @@ exports.login = async (req, res) => {
     });
     if (user) {
       const match = await bcrypt.compareSync(input.password, user.password);
-      console.log(input.password);
-      console.log(user.password);
-      console.log(match);
       if (match) {
         const token = jwt.sign(
           {
