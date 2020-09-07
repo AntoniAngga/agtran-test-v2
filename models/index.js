@@ -11,6 +11,8 @@ const db = {};
 let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else if (config.database_url) {
+  sequelize = new Sequelize(config.database_url);
 } else {
   sequelize = new Sequelize(
     config.database,
