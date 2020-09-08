@@ -5,12 +5,16 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const redis = require('./utils/redis');
+const cors = require('cors');
 
 const index = require('./routes/index');
 const auth = require('./routes/api/v1/auth');
 const user = require('./routes/api/v1/user');
 
 const app = express();
+
+app.use(cors());
+app.options('*', cors());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

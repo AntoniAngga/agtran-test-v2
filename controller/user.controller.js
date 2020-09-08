@@ -34,7 +34,6 @@ exports.create = async (req, res) => {
   try {
     const data = req.body;
     const hash = bcrypt.hashSync(data.password, parseInt(saltRounds));
-
     const users = await User.create({ ...data, password: hash });
     res.status(200).json({
       messages: 'Complete Created User',
