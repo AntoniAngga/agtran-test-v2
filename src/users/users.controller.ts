@@ -1,7 +1,10 @@
 import * as express from 'express';
 import User from './user.interface';
+import Controller from '../../interfaces/controller.interfaces';
+import validationMiddleware from '../middleware/validation.middleware';
+import CreateUserDto from './user.dto';
 
-class UsersController {
+class UsersController implements Controller {
   public path = '/users';
   public router = express.Router();
 
@@ -11,9 +14,17 @@ class UsersController {
 
   public intializeRoutes() {
     this.router.get(this.path, this.findAll);
-    this.router.post(this.path, this.create);
+    this.router.post(
+      this.path,
+      validationMiddleware(CreateUserDto),
+      this.create
+    );
     this.router.get(this.path + '/:id', this.findOne);
-    this.router.put(this.path + '/:id', this.update);
+    this.router.put(
+      this.path + '/:id',
+      validationMiddleware(CreateUserDto, true),
+      this.update
+    );
     this.router.delete(this.path + '/:id', this.delete);
   }
 
