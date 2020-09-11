@@ -1,12 +1,16 @@
 import * as express from 'express';
-import User from './user.interface';
-import Controller from '../../interfaces/controller.interfaces';
+import Controller from '../interfaces/controller.interfaces';
 import validationMiddleware from '../middleware/validation.middleware';
 import CreateUserDto from './user.dto';
+import { getRepository } from 'typeorm';
+import User from './user.entity';
+import HttpException from '../exceptions/HttpException';
+import NotFoundException from '../exceptions/NotFoundException';
 
 class UsersController implements Controller {
   public path = '/users';
   public router = express.Router();
+  private userRepository = getRepository(User);
 
   constructor() {
     this.intializeRoutes();
@@ -14,11 +18,6 @@ class UsersController implements Controller {
 
   public intializeRoutes() {
     this.router.get(this.path, this.findAll);
-    this.router.post(
-      this.path,
-      validationMiddleware(CreateUserDto),
-      this.create
-    );
     this.router.get(this.path + '/:id', this.findOne);
     this.router.put(
       this.path + '/:id',
@@ -28,27 +27,72 @@ class UsersController implements Controller {
     this.router.delete(this.path + '/:id', this.delete);
   }
 
-  private findAll = (req: express.Request, res: express.Response) => {
-    res.send('all Users is here');
+  private findAll = async (req: express.Request, res: express.Response) => {
+    const users = await this.userRepository.find();
+    res.send(users);
   };
 
-  private findOne = (req: express.Request, res: express.Response) => {
+  private findOne = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
     const id = req.params.id;
-    const data: User = req.body;
-    res.send('User is here');
+    const user = await this.userRepository.findOne(id);
+    if (user) {
+      res.send(user);
+    } else {
+      next(new NotFoundException(id, 'User'));
+    }
   };
 
-  private create = (req: express.Request, res: express.Response) => {
-    const data: User = req.body;
-    res.send('create User is Here');
+  // private create = async (
+  //   req: express.Request,
+  //   res: express.Response,
+  //   next: express.NextFunction
+  // ) => {
+  //   const userData: CreateUserDto = req.body;
+  //   try {
+  //     const newUser = this.userRepository.create(userData);
+  //     await this.userRepository.save(newUser);
+  //     res.send(newUser);
+  //   } catch (err) {
+  //     next(new HttpException(500, err.detail));
+  //   }
+  // };
+
+  private delete = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    const id = req.params.id;
+    const user = await this.userRepository.delete(id);
+    if (user.affected != 0) {
+      res.send(user);
+    } else {
+      next(new NotFoundException(id, 'User'));
+    }
   };
 
-  private delete = (req: express.Request, res: express.Response) => {
-    res.send('Delete user is here');
-  };
-
-  private update = (req: express.Request, res: express.Response) => {
-    res.send('Update user is here');
+  private update = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    const id = req.params.id;
+    const userData: User = req.body;
+    try {
+      await this.userRepository.update(id, userData);
+      const updatedUser = await this.userRepository.findOne(id);
+      if (updatedUser) {
+        res.send(updatedUser);
+      } else {
+        next(new NotFoundException(id, 'User'));
+      }
+    } catch (err) {
+      next(new HttpException(500, err.detail));
+    }
   };
 }
 

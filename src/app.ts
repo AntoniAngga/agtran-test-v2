@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
-import Controller from '../interfaces/controller.interfaces';
+import Controller from './interfaces/controller.interfaces';
 import errorMiddleware from './middleware/error.middleware';
 
 class App {
