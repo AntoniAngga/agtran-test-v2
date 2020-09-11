@@ -6,11 +6,13 @@ import { getRepository } from 'typeorm';
 import User from './user.entity';
 import HttpException from '../exceptions/HttpException';
 import NotFoundException from '../exceptions/NotFoundException';
+import * as Redis from 'ioredis';
 
 class UsersController implements Controller {
   public path = '/users';
   public router = express.Router();
   private userRepository = getRepository(User);
+  private redis = new Redis();
 
   constructor() {
     this.intializeRoutes();
@@ -27,9 +29,18 @@ class UsersController implements Controller {
     this.router.delete(this.path + '/:id', this.delete);
   }
 
-  private findAll = async (req: express.Request, res: express.Response) => {
-    const users = await this.userRepository.find();
-    res.send(users);
+  private findAll = async (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    try {
+      const users = await this.userRepository.find();
+      await this.redis.set('usersCache', JSON.stringify(users), 'EX', 300);
+      res.send(users);
+    } catch (err) {
+      next(new HttpException(500, err));
+    }
   };
 
   private findOne = async (

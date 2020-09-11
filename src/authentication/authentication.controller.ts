@@ -10,6 +10,7 @@ import HttpException from '../exceptions/HttpException';
 import WrongCredentialsException from '../exceptions/WrongCredentialsException';
 import ChangePasswordDto from './ChangePassword.dto';
 import NotFoundException from '../exceptions/NotFoundException';
+import * as Redis from 'ioredis';
 
 class AuthenticationController implements Controller {
   public path = '/auth';
