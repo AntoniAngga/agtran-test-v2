@@ -13,6 +13,7 @@ class App {
     this.app = express();
     this.port = port;
 
+    this.initializeViews();
     this.initializeMiddlewares();
     this.initializeControllers(controllers);
     this.initializeErrorHandling();
@@ -28,6 +29,11 @@ class App {
     controllers.forEach((controller) => {
       this.app.use(this.url, controller.router);
     });
+  }
+
+  private initializeViews() {
+    this.app.set('views', 'src/views');
+    this.app.set('view engine', 'ejs');
   }
 
   private initializeErrorHandling() {

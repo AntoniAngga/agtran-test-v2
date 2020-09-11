@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Agtran Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <h1> GOOGLE AUTHENTICATION</h1>
+    <a href="<%=url%>">
+      <button type="submit"><%=button%></button>
+    </a>
+    <% if(userInfo) { %>
+      <p>
+        <img src="<%= userInfo.picture%>" alt="<%= userInfo.name%>" width="250" height="250">
+      </p>
+      <p><%= userInfo.id %></p>
+      <p><%= userInfo.email %></p>
+      <p><%= userInfo.name %></p>
+    <% } else { %>
+      <p> You Should Login First</p>
+    <% } %>
+  </body>
+</html>
