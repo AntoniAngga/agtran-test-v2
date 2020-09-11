@@ -2,6 +2,17 @@
 
 i join freelance project, from agtran test. wish me luck guys 😇, so this code writing with Typescript.
 
+## Docker
+
+if you want, to running docker. make sure your docker has installer.
+so running this
+
+```script
+npm run docker
+```
+
+the url using localhost:5000
+
 ## REST API List of Authentification routes
 
 | Routes                              | HTTP | Auth  | Description                  |

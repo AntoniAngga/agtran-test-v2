@@ -28,6 +28,8 @@
   "homepage": "https://github.com/AntoniAngga/agtran-test-v2#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "class-transformer": "^0.3.1",
+    "class-validator": "^0.12.2",
     "debug": "~2.6.3",
     "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
