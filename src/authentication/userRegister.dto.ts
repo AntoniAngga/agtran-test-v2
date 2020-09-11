@@ -1,10 +1,13 @@
 import { IsString, IsOptional, IsEmail, IsDate } from 'class-validator';
 import { Transform } from 'class-transformer';
 
-class CreateUserDto {
+class CreateUserRegisterDto {
   @IsString()
   @IsEmail()
   public email: string;
+
+  @IsString()
+  public password: string;
 
   @IsString()
   public firstName: string;
@@ -21,4 +24,4 @@ class CreateUserDto {
   public icNumber: string;
 }
 
-export default CreateUserDto;
+export default CreateUserRegisterDto;
