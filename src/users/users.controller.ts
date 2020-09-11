@@ -46,21 +46,6 @@ class UsersController implements Controller {
     }
   };
 
-  // private create = async (
-  //   req: express.Request,
-  //   res: express.Response,
-  //   next: express.NextFunction
-  // ) => {
-  //   const userData: CreateUserDto = req.body;
-  //   try {
-  //     const newUser = this.userRepository.create(userData);
-  //     await this.userRepository.save(newUser);
-  //     res.send(newUser);
-  //   } catch (err) {
-  //     next(new HttpException(500, err.detail));
-  //   }
-  // };
-
   private delete = async (
     req: express.Request,
     res: express.Response,
