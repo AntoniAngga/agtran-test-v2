@@ -3,12 +3,12 @@ import * as bcrypt from 'bcrypt';
 import Controller from '../interfaces/controller.interfaces';
 import validationMiddleware from '../middleware/validation.middleware';
 import CreateUserRegisterDto from './userRegister.dto';
-import LogInDto from './logIn.dto';
+import LogInDto from '../authentication/LogIn.dto';
 import { getRepository } from 'typeorm';
 import User from '../users/user.entity';
 import HttpException from '../exceptions/HttpException';
 import WrongCredentialsException from '../exceptions/WrongCredentialsException';
-import ChangePasswordDto from './ChangePassword.dto';
+import ChangePasswordDto from '../authentication/ChangePassword.dto';
 import NotFoundException from '../exceptions/NotFoundException';
 import { google } from 'googleapis';
 
