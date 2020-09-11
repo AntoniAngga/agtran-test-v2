@@ -12,7 +12,7 @@ class UsersController implements Controller {
   public path = '/users';
   public router = express.Router();
   private userRepository = getRepository(User);
-  private redis = new Redis();
+  private redis = new Redis({ host: process.env.REDIS_HOST });
 
   constructor() {
     this.intializeRoutes();
